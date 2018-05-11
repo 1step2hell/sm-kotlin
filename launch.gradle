@@ -1,0 +1,48 @@
+// Extras that are not a part of the build configuration or build itself will go here.
+
+// Running from terminal/cmd line the install command does not start the app.
+// writing a hook to do so.
+android.applicationVariants.all { variant ->
+
+    // launch after install
+    if (variant.install != null) {
+        variant.install.doLast {
+
+            // Make the applicationId of last flavor dimension as final applicationId,
+            // if it doesn't exist, replace with the applicationId of defaultConfig block.
+            // Ignore buildType block cos property applicationId is forbidden inside it.
+            def appId = ((variant.productFlavors.applicationId.size > 0) && variant.productFlavors.applicationId[-1]) ? variant.productFlavors.applicationId[-1] : android.defaultConfig.applicationId
+            //  def appId = variant.productFlavors.applicationId.size > 0 ? (variant.productFlavors.applicationId[-1] ?: android.defaultConfig.applicationId) : android.defaultConfig.applicationId
+
+            // applicationIdSuffix of defaultConfig block
+            def defaultAppIdSuffix = android.defaultConfig.applicationIdSuffix ?: ''
+
+            // applicationIdSuffix of flavor block
+            // Combine applicationIdSuffix of all the flavor demensions in order
+            def flavorAppIdSuffix = ''
+            variant.productFlavors.applicationIdSuffix.each { suffix ->
+                flavorAppIdSuffix += suffix ?: ''
+            }
+
+            // applicationIdSuffix of buildType block
+            def buildTypeAppIdSuffix = variant.buildType.applicationIdSuffix ?: ''
+
+            // Combine applicationIdSuffix of all these three blocks in order,
+            // and we get the final applicationIdSuffix.
+            def appIdSuffix = defaultAppIdSuffix + flavorAppIdSuffix + buildTypeAppIdSuffix
+
+            // Combine applicationId with applicationIdSuffix in order,
+            // finally we get the package name.
+            def packageName = appId + appIdSuffix
+
+            // launch activity
+//            def launchActivity = 'com.step2hell.newsmth.MainActivity' // moved to config.gradle
+            def startupClass = packageName + File.separator + launchActivity
+
+            exec {
+                executable = 'adb'
+                args = ['shell', 'am', 'start', '-c', 'android.intent.category.LAUNCHER', '-n', startupClass]
+            }
+        }
+    }
+}
