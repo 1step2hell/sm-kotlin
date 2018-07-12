@@ -18,6 +18,10 @@ android {
         multiDexEnabled true
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
@@ -53,7 +57,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVer"
 
     testImplementation "junit:junit:$junit"
     testImplementation "org.mockito:mockito-core:$mockito"
@@ -77,11 +81,14 @@ dependencies {
     implementation "com.android.support:support-compat:$support"
     implementation "com.android.support:support-content:$support"
 
-    implementation "org.jsoup:jsoup:$jsoup"
+    kapt "com.android.databinding:compiler:$gradleVer"
 
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava"
+    implementation "org.jsoup:jsoup:$jsoup"
+    implementation "com.google.code.gson:gson:gson"
+
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin"
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid"
-    implementation "com.tbruyelle.rxpermissions2:rxpermissions:$rxpermissions"
+    implementation "com.github.tbruyelle:rxpermissions:$rxpermissions"
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
