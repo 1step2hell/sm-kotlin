@@ -81,6 +81,32 @@ dependencies {
     implementation "com.android.support:support-compat:$support"
     implementation "com.android.support:support-content:$support"
 
+    //  https://developer.android.google.cn/topic/libraries/architecture/adding-components
+    //  https://developer.android.google.cn/kotlin/ktx
+    // ViewModel and LiveData
+    implementation "android.arch.lifecycle:extensions:$lifecycle"
+    // alternatively - just ViewModel
+    implementation "android.arch.lifecycle:viewmodel:$lifecycle"
+    // alternatively - just LiveData
+    implementation "android.arch.lifecycle:livedata:$lifecycle"
+    // alternatively - Lifecycles only (no ViewModel or LiveData).
+    //     Support library depends on this lightweight import
+    implementation "android.arch.lifecycle:runtime:$lifecycle"
+    // kapt "android.arch.lifecycle:compiler:$lifecycle"
+    // alternately - if using Java8, use the following instead of compiler
+    implementation "android.arch.lifecycle:common-java8:$lifecycle"
+    // optional - ReactiveStreams support for LiveData
+    implementation "android.arch.lifecycle:reactivestreams:$lifecycle"
+    // optional - Test helpers for LiveData
+    testImplementation "android.arch.core:core-testing:$lifecycle"
+
+    implementation "android.arch.persistence.room:runtime:$room"
+    kapt "android.arch.persistence.room:compiler:$room"
+    // optional - RxJava support for Room
+    implementation "android.arch.persistence.room:rxjava2:$room"
+    // Test helpers
+    testImplementation "android.arch.persistence.room:testing:$room"
+
     kapt "com.android.databinding:compiler:$gradleVer"
 
     implementation "org.jsoup:jsoup:$jsoup"

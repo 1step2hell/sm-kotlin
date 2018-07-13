@@ -15,6 +15,8 @@ ext {
     // App dependencies
     junit               = '4.12'
     support             = '27.1.1'
+    lifecycle           = '1.1.1'
+    room                = '1.1.1'
     constraint          = '1.0.2'
     jsoup               = '1.11.3'
     gson                = '2.8.5'
