@@ -3,7 +3,7 @@ ext {
     compileSdkVer       = 27
 //    buildToolsVer       = '27.0.3'
     appId               = "com.step2hell.newsmth"
-    launchActivity      = "com.step2hell.newsmth.MainActivity"
+    launchActivity      = "com.step2hell.newsmth.ui.MainActivity"
     minSdkVer           = 21
     targetSdkVer        = 27
     verCode             = 2017100101    // versionCode ∈ [-2^31,2^31-1]
@@ -17,6 +17,8 @@ ext {
     support             = '27.1.1'
     lifecycle           = '1.1.1'
     room                = '1.1.1'
+    navigation          = '1.0.0-alpha03'
+    work                = '1.0.0-alpha04'
     constraint          = '1.0.2'
     jsoup               = '1.11.3'
     gson                = '2.8.5'
