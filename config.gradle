@@ -1,7 +1,7 @@
 ext {
     // sdk and tools
     compileSdkVer       = 27
-//    buildToolsVer       = '27.0.3'
+    buildToolsVer       = '27.0.3'
     appId               = "com.step2hell.newsmth"
     launchActivity      = "com.step2hell.newsmth.ui.MainActivity"
     minSdkVer           = 21
