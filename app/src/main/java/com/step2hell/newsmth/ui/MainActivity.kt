@@ -2,16 +2,18 @@ package com.step2hell.newsmth.ui
 
 import android.os.Bundle
 import android.util.Log
+import com.google.gson.Gson
 import com.step2hell.newsmth.R
 import com.step2hell.newsmth.data.remote.ApiServiceHelper
+import com.step2hell.newsmth.data.remote.dto.AdRsp
 import com.step2hell.newsmth.data.remote.service.NewsmthService
+import com.step2hell.newsmth.utilities.HtmlUtils
 import com.step2hell.newsmth.utilities.RxBus
+import com.step2hell.newsmth.widgets.AdDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
-import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.ResponseBody
 
 
 class MainActivity : BaseActivity() {
@@ -25,9 +27,14 @@ class MainActivity : BaseActivity() {
                 .createService(NewsmthService.BASE_URL, NewsmthService::class.java)
                 .getIndexHtml()
                 .subscribeOn(Schedulers.newThread())
-//                .map(Function {  }) // do map here
+                .map { body -> Gson().fromJson(HtmlUtils.getSubSample(body.string(), "preimg=\\[(.*?)\\]"), AdRsp::class.java) }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(Consumer<ResponseBody> { responseBody -> Log.e("Bob", "ResponseBody:" + responseBody.string()) })
+                .subscribe { adRsp ->
+                    Log.e("Bob", "AdRsp:" + adRsp.toString());
+                    val dialog = AdDialog(this)
+                    dialog.show()
+                    dialog.setAd(adRsp)
+                }
 
         val disposable = RxBus.getInstance()
                 .listen(Integer::class.java)
@@ -42,6 +49,7 @@ class MainActivity : BaseActivity() {
                 .subscribe(Consumer<Haha> { integer -> Log.e("Bob", "Thread:" + Thread.currentThread() + ", MainActivity listen:" + integer) })
         RxBus.getInstance().register(this, disposable1)
         RxBus.getInstance().publish(Haha())
+
     }
 
     override fun onDestroy() {
@@ -49,7 +57,7 @@ class MainActivity : BaseActivity() {
         RxBus.getInstance().unregister(this)
     }
 
-    class Haha constructor(){
+    class Haha constructor() {
 
     }
 }
