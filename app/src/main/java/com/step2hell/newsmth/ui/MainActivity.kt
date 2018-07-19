@@ -21,7 +21,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        hello.setText("haha")
+        hello.text = "haha"
 
         ApiServiceHelper.INSTANCE
                 .createService(NewsmthService.BASE_URL, NewsmthService::class.java)
@@ -39,14 +39,14 @@ class MainActivity : BaseActivity() {
         val disposable = RxBus.getInstance()
                 .listen(Integer::class.java)
                 .observeOn(Schedulers.newThread())
-                .subscribe(Consumer<Integer> { integer -> Log.e("Bob", "Thread:" + Thread.currentThread() + ", MainActivity listen:" + integer) })
+                .subscribe(Consumer<Integer> { i -> Log.e("Bob", "Thread:" + Thread.currentThread() + ", MainActivity listen:" + i) })
         RxBus.getInstance().register(this, disposable)
         RxBus.getInstance().publish(2)
 
         val disposable1 = RxBus.getInstance()
                 .listen(Haha::class.java)
                 .observeOn(Schedulers.newThread())
-                .subscribe(Consumer<Haha> { integer -> Log.e("Bob", "Thread:" + Thread.currentThread() + ", MainActivity listen:" + integer) })
+                .subscribe(Consumer<Haha> { haha -> Log.e("Bob", "Thread:" + Thread.currentThread() + ", MainActivity listen:" + haha.toString()) })
         RxBus.getInstance().register(this, disposable1)
         RxBus.getInstance().publish(Haha())
 
