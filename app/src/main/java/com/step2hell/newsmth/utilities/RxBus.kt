@@ -6,10 +6,10 @@ import io.reactivex.processors.PublishProcessor
 
 class RxBus private constructor() {
 
-    protected val processor = PublishProcessor.create<Any>().toSerialized()
-    protected val map = HashMap<String, CompositeDisposable>()
+    private val processor = PublishProcessor.create<Any>().toSerialized()
+    private val map = HashMap<String, CompositeDisposable>()
 
-    inline fun <reified A : Any> register(a: A, d: Disposable) {
+    fun register(a: Any, d: Disposable) {
         val key = a::class.java.name
         if (map[key] == null) {
             map[key] = CompositeDisposable()
@@ -17,7 +17,7 @@ class RxBus private constructor() {
         map[key]!!.add(d)
     }
 
-    inline fun <reified A : Any> unregister(a: A) {
+    fun unregister(a: Any) {
         val key = a::class.java.name
         if (map[key] != null) {
             map[key]!!.dispose()
@@ -25,9 +25,10 @@ class RxBus private constructor() {
         }
     }
 
-    inline fun <reified T> publish(t: T) = processor.onNext(t)
 
-    inline fun <reified T> listen(eventType: Class<T>) = processor.ofType(eventType)
+    fun <T> publish(t: T) = processor.onNext(t)
+
+    fun <T> listen(eventType: Class<T>) = processor.ofType(eventType)
 
 
     companion object {
