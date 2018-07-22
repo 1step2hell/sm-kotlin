@@ -1,9 +1,7 @@
 package com.step2hell.newsmth.utilities
 
-import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.processors.FlowableProcessor
 import io.reactivex.processors.PublishProcessor
 
 class RxBus private constructor() {
@@ -27,13 +25,10 @@ class RxBus private constructor() {
         }
     }
 
-    fun <T> publish(t: T) {
-        processor.onNext(t)
-    }
 
-    fun <T> listen(eventType: Class<T>): Flowable<T> {
-        return processor.ofType(eventType)
-    }
+    fun <T> publish(t: T) = processor.onNext(t)
+
+    fun <T> listen(eventType: Class<T>) = processor.ofType(eventType)
 
 
     companion object {
