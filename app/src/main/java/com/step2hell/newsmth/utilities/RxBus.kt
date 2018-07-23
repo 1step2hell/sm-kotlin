@@ -9,22 +9,21 @@ class RxBus private constructor() {
     private val processor = PublishProcessor.create<Any>().toSerialized()
     private val map = HashMap<String, CompositeDisposable>()
 
-    fun register(a: Any, d: Disposable) {
-        val key = a::class.java.name
+    fun <T : Any> register(t: T, d: Disposable) {
+        val key = t::class.java.name
         if (map[key] == null) {
             map[key] = CompositeDisposable()
         }
         map[key]!!.add(d)
     }
 
-    fun unregister(a: Any) {
-        val key = a::class.java.name
+    fun <T : Any> unregister(t: T) {
+        val key = t::class.java.name
         if (map[key] != null) {
             map[key]!!.dispose()
             map.remove(key)
         }
     }
-
 
     fun <T> publish(t: T) = processor.onNext(t)
 
